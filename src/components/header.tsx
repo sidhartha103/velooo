@@ -4,7 +4,7 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Home, GalleryHorizontal, Wand2, AtSign, Menu, Lightbulb } from 'lucide-react';
+import { Home, GalleryHorizontal, Wand2, AtSign, Menu, MessageSquare } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from './ui/button';
 import { Sheet, SheetContent, SheetTrigger, SheetClose } from '@/components/ui/sheet';
@@ -27,6 +27,7 @@ export function Header() {
         { href: '/', icon: Home, label: 'Home' },
         { href: '/discover', icon: GalleryHorizontal, label: 'Discover' },
         { href: '/features', icon: Wand2, label: 'Features' },
+        { href: '/feedback', icon: MessageSquare, label: 'Feedback' },
         { href: '/contact', icon: AtSign, label: 'Contact' },
     ];
 

@@ -1,33 +1,21 @@
+
+'use client';
+
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
+import { useTestimonials } from "@/context/testimonials-context";
 
 export function Testimonials({ className }: { className?: string }) {
-    const testimonialsData = [
-        {
-            name: "Sarah L.",
-            role: "Fashion Influencer",
-            avatar: "https://placehold.co/100x100.png",
-            hint: "woman portrait",
-            text: "VeloShoot is a game-changer. The 10-minute turnaround for high-quality reels is unheard of. It's completely streamlined my content creation process!"
-        },
-        {
-            name: "David C.",
-            role: "Event Planner",
-            avatar: "https://placehold.co/100x100.png",
-            hint: "man portrait",
-            text: "I booked a creator for a corporate event, and the results were phenomenal. The professionalism and quality exceeded all expectations. Highly recommended."
-        },
-        {
-            name: "Maya G.",
-            role: "Travel Vlogger",
-            avatar: "https://placehold.co/100x100.png",
-            hint: "woman smiling",
-            text: "The platform is so easy to use, and the creator network is top-notch. I can always find the perfect match for my style, no matter where I am."
-        }
-    ];
+    const { testimonials } = useTestimonials();
+    const approvedTestimonials = testimonials.filter(t => t.status === 'approved');
 
-    const duplicatedTestimonials = [...testimonialsData, ...testimonialsData];
+    // Duplicate for infinite scroll effect
+    const testimonialsToDisplay = approvedTestimonials.length > 0 ? [...approvedTestimonials, ...approvedTestimonials] : [];
+
+    if (approvedTestimonials.length === 0) {
+        return null; // Don't render the section if there are no approved testimonials
+    }
 
     return (
         <section className={cn("py-20", className)}>
@@ -38,8 +26,8 @@ export function Testimonials({ className }: { className?: string }) {
                 </div>
                 <div className="relative w-full overflow-hidden [mask-image:linear-gradient(to_right,transparent,white_10%,white_90%,transparent)]">
                     <div className="flex w-max animate-scroll-x hover:[animation-play-state:paused]">
-                        {duplicatedTestimonials.map((testimonial, index) => (
-                            <Card key={index} className="bg-card border-border/50 backdrop-blur-sm w-[clamp(300px,30vw,400px)] mx-4 shrink-0">
+                        {testimonialsToDisplay.map((testimonial, index) => (
+                            <Card key={`${testimonial.id}-${index}`} className="bg-card border-border/50 backdrop-blur-sm w-[clamp(300px,30vw,400px)] mx-4 shrink-0">
                                 <CardContent className="pt-6">
                                     <blockquote className="text-muted-foreground mb-6 border-l-2 border-primary pl-4 italic">"{testimonial.text}"</blockquote>
                                     <div className="flex items-center gap-4">
