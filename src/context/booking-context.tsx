@@ -52,10 +52,18 @@ export function BookingProvider({ children }: { children: ReactNode }) {
     const addBooking = useCallback((booking: Omit<Booking, 'id' | 'status'>) => {
         const newBooking: Booking = { ...booking, id: Date.now(), status: 'new' };
         setBookings(prev => [newBooking, ...prev]);
-        toast({
-            title: 'Enquiry Submitted!',
-            description: 'We have received your request and will get back to you shortly.',
-        });
+        
+        if (booking.name === 'Call Request') {
+            toast({
+                title: 'Call Request Received!',
+                description: 'We will call you back shortly.',
+            });
+        } else {
+            toast({
+                title: 'Enquiry Submitted!',
+                description: 'We have received your request and will get back to you shortly.',
+            });
+        }
     }, [toast]);
 
     const updateBookingStatus = useCallback((id: number, status: 'contacted') => {
