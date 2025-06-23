@@ -1,8 +1,25 @@
+'use client';
 
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 import { DollarSign, Users, Film } from "lucide-react";
+import { useEmployees } from "@/context/employee-context";
+import { useBookings } from "@/context/booking-context";
 
 export default function AdminDashboardPage() {
+    const { employees } = useEmployees();
+    const { bookings } = useBookings();
+
+    const activeCreators = employees.filter(e => e.status === 'approved').length;
+
+    const shootsThisMonth = bookings.filter(booking => {
+        // An invalid date string will result in an invalid Date object
+        const bookingDate = new Date(booking.date);
+        const now = new Date();
+        // Check if the date is valid before comparing
+        if (isNaN(bookingDate.getTime())) return false;
+        return bookingDate.getMonth() === now.getMonth() && bookingDate.getFullYear() === now.getFullYear();
+    }).length;
+
     return (
         <div className="space-y-6">
             <h1 className="text-3xl font-bold">Dashboard</h1>
@@ -17,7 +34,7 @@ export default function AdminDashboardPage() {
                     <CardContent>
                         <div className="text-2xl font-bold">$45,231.89</div>
                         <p className="text-xs text-muted-foreground">
-                            +20.1% from last month
+                            (Static data)
                         </p>
                     </CardContent>
                 </Card>
@@ -29,9 +46,9 @@ export default function AdminDashboardPage() {
                         <Users className="h-4 w-4 text-muted-foreground" />
                     </CardHeader>
                     <CardContent>
-                        <div className="text-2xl font-bold">+235</div>
+                        <div className="text-2xl font-bold">{activeCreators}</div>
                         <p className="text-xs text-muted-foreground">
-                            +180.1% from last month
+                            Total approved creators
                         </p>
                     </CardContent>
                 </Card>
@@ -41,9 +58,9 @@ export default function AdminDashboardPage() {
                         <Film className="h-4 w-4 text-muted-foreground" />
                     </CardHeader>
                     <CardContent>
-                        <div className="text-2xl font-bold">+12</div>
+                        <div className="text-2xl font-bold">{shootsThisMonth}</div>
                         <p className="text-xs text-muted-foreground">
-                            +19% from last month
+                            based on booking date
                         </p>
                     </CardContent>
                 </Card>
