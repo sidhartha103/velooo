@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useTestimonials, type Testimonial } from '@/context/testimonials-context';
@@ -6,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { ThumbsUp, ThumbsDown, MessageSquare, Trash2 } from 'lucide-react';
+import { ThumbsUp, ThumbsDown, MessageSquare, Trash2, Eye, EyeOff } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
 export default function FeedbackManagementPage() {
@@ -18,13 +17,25 @@ export default function FeedbackManagementPage() {
     const rejected = testimonials.filter(t => t.status === 'rejected');
 
     const handleApprove = (id: number) => {
+        const testimonial = testimonials.find(t => t.id === id);
+        const wasRejected = testimonial?.status === 'rejected';
         approveTestimonial(id);
-        toast({ title: 'Feedback Approved', description: 'This testimonial will now appear on the homepage.' });
+        if (wasRejected) {
+             toast({ title: 'Feedback Shown', description: 'This testimonial will now appear on the homepage.' });
+        } else {
+            toast({ title: 'Feedback Approved', description: 'This testimonial will now appear on the homepage.' });
+        }
     };
 
     const handleReject = (id: number) => {
+        const testimonial = testimonials.find(t => t.id === id);
+        const wasApproved = testimonial?.status === 'approved';
         rejectTestimonial(id);
-        toast({ title: 'Feedback Rejected' });
+        if (wasApproved) {
+            toast({ title: 'Feedback Hidden', description: 'This testimonial will no longer appear on the homepage.' });
+        } else {
+            toast({ title: 'Feedback Rejected' });
+        }
     };
 
     const handleDelete = (id: number) => {
@@ -50,6 +61,7 @@ export default function FeedbackManagementPage() {
                         testimonials={pending}
                         title="Pending Approval"
                         description="Review the following submissions."
+                        status="pending"
                         onApprove={handleApprove}
                         onReject={handleReject}
                         onDelete={handleDelete}
@@ -60,6 +72,8 @@ export default function FeedbackManagementPage() {
                         testimonials={approved}
                         title="Approved Feedback"
                         description="These testimonials are live on your site."
+                        status="approved"
+                        onReject={handleReject}
                         onDelete={handleDelete}
                     />
                 </TabsContent>
@@ -68,6 +82,8 @@ export default function FeedbackManagementPage() {
                         testimonials={rejected}
                         title="Rejected Feedback"
                         description="These submissions were not approved."
+                        status="rejected"
+                        onApprove={handleApprove}
                         onDelete={handleDelete}
                     />
                 </TabsContent>
@@ -80,12 +96,13 @@ interface FeedbackListProps {
     testimonials: Testimonial[];
     title: string;
     description: string;
+    status: 'pending' | 'approved' | 'rejected';
     onApprove?: (id: number) => void;
     onReject?: (id: number) => void;
     onDelete?: (id: number) => void;
 }
 
-function FeedbackList({ testimonials, title, description, onApprove, onReject, onDelete }: FeedbackListProps) {
+function FeedbackList({ testimonials, title, description, status, onApprove, onReject, onDelete }: FeedbackListProps) {
     if (testimonials.length === 0) {
         return (
             <Card>
@@ -127,16 +144,28 @@ function FeedbackList({ testimonials, title, description, onApprove, onReject, o
                         </CardContent>
                         {(onApprove || onReject || onDelete) && (
                             <CardFooter className="justify-end gap-2">
-                                {onReject && (
+                                {status === 'pending' && onReject && (
                                     <Button variant="outline" size="sm" onClick={() => onReject(testimonial.id)}>
                                         <ThumbsDown className="mr-2 h-4 w-4" />
                                         Reject
                                     </Button>
                                 )}
-                                {onApprove && (
+                                {status === 'pending' && onApprove && (
                                     <Button size="sm" onClick={() => onApprove(testimonial.id)}>
                                         <ThumbsUp className="mr-2 h-4 w-4" />
                                         Approve
+                                    </Button>
+                                )}
+                                {status === 'approved' && onReject && (
+                                    <Button variant="outline" size="sm" onClick={() => onReject(testimonial.id)}>
+                                        <EyeOff className="mr-2 h-4 w-4" />
+                                        Hide
+                                    </Button>
+                                )}
+                                {status === 'rejected' && onApprove && (
+                                    <Button size="sm" onClick={() => onApprove(testimonial.id)}>
+                                        <Eye className="mr-2 h-4 w-4" />
+                                        Show
                                     </Button>
                                 )}
                                 {onDelete && (
