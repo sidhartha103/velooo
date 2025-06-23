@@ -38,7 +38,7 @@ interface EmployeeContextType {
 const EmployeeContext = createContext<EmployeeContextType | undefined>(undefined);
 
 export function EmployeeProvider({ children }: { children: ReactNode }) {
-    const [employees, setEmployees] = useState<Employee[]>([]);
+    const [employees, setEmployees] = useState<Employee[]>(initialEmployees);
     const [isInitialized, setIsInitialized] = useState(false);
 
     useEffect(() => {
@@ -47,11 +47,10 @@ export function EmployeeProvider({ children }: { children: ReactNode }) {
             if (storedEmployees) {
                 setEmployees(JSON.parse(storedEmployees));
             } else {
-                setEmployees(initialEmployees);
+                localStorage.setItem('employees', JSON.stringify(initialEmployees));
             }
         } catch (error) {
             console.error("Failed to load employees from localStorage", error);
-            setEmployees(initialEmployees);
         }
         setIsInitialized(true);
     }, []);
