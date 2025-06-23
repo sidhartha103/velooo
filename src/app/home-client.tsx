@@ -5,6 +5,8 @@ import { Hero } from '@/components/sections/hero';
 import { Features } from '@/components/sections/features';
 import { GetStarted } from '@/components/sections/get-started';
 import { BookingModal } from '@/components/booking-modal';
+import { CreatorShowcase } from '@/components/sections/creator-showcase';
+import { Testimonials } from '@/components/sections/testimonials';
 
 export function HomePageClient() {
     const [isBookingModalOpen, setIsBookingModalOpen] = useState(false);
@@ -13,6 +15,8 @@ export function HomePageClient() {
         <>
             <Hero onBookNowClick={() => setIsBookingModalOpen(true)} />
             <Features />
+            <CreatorShowcase />
+            <Testimonials />
             <GetStarted />
             <BookingModal isOpen={isBookingModalOpen} onOpenChange={setIsBookingModalOpen} />
         </>
