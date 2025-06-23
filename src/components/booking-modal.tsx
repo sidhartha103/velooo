@@ -29,6 +29,7 @@ export function BookingModal({ isOpen, onOpenChange }: BookingModalProps) {
   const [email, setEmail] = useState('');
   const [occasion, setOccasion] = useState('');
   const [date, setDate] = useState('');
+  const [callRequestPhone, setCallRequestPhone] = useState('');
 
   const occasions = ["Wedding", "Birthday", "Corporate Event", "Fashion Shoot", "Product Shoot", "Other"];
 
@@ -55,7 +56,24 @@ export function BookingModal({ isOpen, onOpenChange }: BookingModalProps) {
   };
   
   const handleRequestCall = () => {
-    console.log("Call requested!");
+    if (!callRequestPhone) {
+        toast({
+            variant: 'destructive',
+            title: 'Missing Phone Number',
+            description: 'Please enter your phone number to request a call.',
+        });
+        return;
+    }
+
+    addBooking({
+        name: 'Call Request',
+        phone: callRequestPhone,
+        email: 'N/A',
+        occasion: 'Call Back',
+        date: new Date().toISOString(),
+    });
+
+    setCallRequestPhone('');
     onOpenChange(false);
   };
 
@@ -102,14 +120,27 @@ export function BookingModal({ isOpen, onOpenChange }: BookingModalProps) {
           <span className="flex-shrink mx-4 text-muted-foreground">OR</span>
           <Separator className="flex-grow bg-border" />
         </div>
-        <Button
-          type="button"
-          onClick={handleRequestCall}
-          variant="outline"
-          className="w-full border-primary text-primary hover:bg-primary hover:text-primary-foreground font-semibold"
-        >
-          Request a Call
-        </Button>
+        <div className="space-y-4">
+            <div>
+                <Label htmlFor="callRequestPhone" className="sr-only">Phone Number</Label>
+                <Input 
+                    id="callRequestPhone" 
+                    type="tel" 
+                    placeholder="Enter your phone number for a quick call" 
+                    className="bg-background"
+                    value={callRequestPhone}
+                    onChange={(e) => setCallRequestPhone(e.target.value)}
+                />
+            </div>
+            <Button
+              type="button"
+              onClick={handleRequestCall}
+              variant="outline"
+              className="w-full border-primary text-primary hover:bg-primary hover:text-primary-foreground font-semibold"
+            >
+              Request a Call
+            </Button>
+        </div>
       </DialogContent>
     </Dialog>
   );
