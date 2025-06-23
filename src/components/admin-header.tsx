@@ -1,8 +1,9 @@
+
 "use client";
 
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { LayoutDashboard, Lightbulb, Menu, User, LogOut, Clapperboard, MessageSquare, Users, CalendarCheck, Briefcase } from 'lucide-react';
+import { LayoutDashboard, Lightbulb, Menu, User, LogOut, Clapperboard, MessageSquare, Users, CalendarCheck, Briefcase, ClipboardList } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from './ui/button';
 import { Sheet, SheetContent, SheetTrigger, SheetClose } from '@/components/ui/sheet';
@@ -23,11 +24,12 @@ export function AdminHeader() {
     const navItems = [
         { href: '/admin', icon: LayoutDashboard, label: 'Dashboard' },
         { href: '/admin/bookings', icon: CalendarCheck, label: 'Bookings' },
+        { href: '/admin/projects', icon: ClipboardList, label: 'Projects' },
         { href: '/admin/planner', icon: Lightbulb, label: 'AI Shoot Planner' },
-        { href: '/admin/showcase', icon: Clapperboard, label: 'Showcase' },
-        { href: '/admin/feedback', icon: MessageSquare, label: 'Feedback' },
         { href: '/admin/employees', icon: Users, label: 'Employees' },
         { href: '/admin/working-employees', icon: Briefcase, label: 'Working Employees' },
+        { href: '/admin/showcase', icon: Clapperboard, label: 'Showcase' },
+        { href: '/admin/feedback', icon: MessageSquare, label: 'Feedback' },
     ];
 
     const handleLogout = () => {
