@@ -7,10 +7,10 @@ import React, { useEffect } from "react";
 
 export function RootLayoutClient({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  const isAdminRoute = pathname.startsWith('/admin');
+  const isProtectedAdminRoute = pathname.startsWith('/admin') && pathname !== '/admin/login';
 
   useEffect(() => {
-    if (isAdminRoute) {
+    if (isProtectedAdminRoute) {
       document.body.classList.add('admin-body');
     } else {
       document.body.classList.remove('admin-body');
@@ -19,9 +19,9 @@ export function RootLayoutClient({ children }: { children: React.ReactNode }) {
     return () => {
       document.body.classList.remove('admin-body');
     }
-  }, [isAdminRoute]);
+  }, [isProtectedAdminRoute]);
 
-  if (isAdminRoute) {
+  if (isProtectedAdminRoute) {
     return <>{children}</>;
   }
 
