@@ -88,4 +88,7 @@
   body.admin-body {
     background-image: radial-gradient(ellipse at top, hsl(6, 68%, 20%), transparent 70%);
   }
+  video:fullscreen {
+    object-fit: contain;
+  }
 }
