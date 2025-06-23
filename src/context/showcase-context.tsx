@@ -1,6 +1,6 @@
 'use client';
 
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import React, { createContext, useContext, useState, ReactNode } from 'react';
 
 const initialReels = [
     { id: 1, src: "https://placehold.co/400x600.png", category: "Events & Weddings", hint: "wedding event", isVideo: false },
@@ -31,33 +31,7 @@ interface ShowcaseContextType {
 const ShowcaseContext = createContext<ShowcaseContextType | undefined>(undefined);
 
 export function ShowcaseProvider({ children }: { children: ReactNode }) {
-    const [reels, setReels] = useState<Reel[]>([]);
-    const [isInitialized, setIsInitialized] = useState(false);
-
-    useEffect(() => {
-        try {
-            const storedReels = localStorage.getItem('showcaseReels');
-            if (storedReels) {
-                setReels(JSON.parse(storedReels));
-            } else {
-                setReels(initialReels);
-            }
-        } catch (error) {
-            console.error("Failed to read from localStorage", error);
-            setReels(initialReels);
-        }
-        setIsInitialized(true);
-    }, []);
-
-    useEffect(() => {
-        if (isInitialized) {
-            try {
-                localStorage.setItem('showcaseReels', JSON.stringify(reels));
-            } catch (error) {
-                console.error("Failed to write to localStorage", error);
-            }
-        }
-    }, [reels, isInitialized]);
+    const [reels, setReels] = useState<Reel[]>(initialReels);
 
     const addReel = (reel: Omit<Reel, 'id'>) => {
         const newReel = { ...reel, id: Date.now() };

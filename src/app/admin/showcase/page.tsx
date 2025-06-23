@@ -23,7 +23,7 @@ export default function ShowcaseManagementPage() {
         }
     };
 
-    const handleAddReel = async (e: React.FormEvent) => {
+    const handleAddReel = (e: React.FormEvent) => {
         e.preventDefault();
         if (!file || !category) {
             toast({
@@ -36,36 +36,23 @@ export default function ShowcaseManagementPage() {
 
         setIsUploading(true);
         
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = () => {
-            const newReel: Omit<Reel, 'id'> = {
-                src: reader.result as string,
-                category: category,
-                isVideo: file.type.startsWith('video/'),
-                hint: category.toLowerCase().split(' ').slice(0, 2).join(' '),
-            };
-            addReel(newReel);
-            setCategory('');
-            setFile(null);
-            const fileInput = document.getElementById('file') as HTMLInputElement;
-            if (fileInput) fileInput.value = "";
-            
-            toast({
-                title: 'Success!',
-                description: 'New showcase item added.',
-            });
-            setIsUploading(false);
+        const newReel: Omit<Reel, 'id'> = {
+            src: URL.createObjectURL(file),
+            category: category,
+            isVideo: file.type.startsWith('video/'),
+            hint: category.toLowerCase().split(' ').slice(0, 2).join(' '),
         };
-        reader.onerror = (error) => {
-            console.error('Error reading file:', error);
-            toast({
-                variant: 'destructive',
-                title: 'File upload failed',
-                description: 'There was an error processing your file.',
-            });
-            setIsUploading(false);
-        };
+        addReel(newReel);
+        setCategory('');
+        setFile(null);
+        const fileInput = document.getElementById('file') as HTMLInputElement;
+        if (fileInput) fileInput.value = "";
+        
+        toast({
+            title: 'Success!',
+            description: 'New showcase item added.',
+        });
+        setIsUploading(false);
     };
 
     return (
