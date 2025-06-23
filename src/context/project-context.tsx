@@ -1,7 +1,7 @@
 
 'use client';
 
-import React, { createContext, useContext, useState, ReactNode, useMemo } from 'react';
+import React, { createContext, useContext, useState, ReactNode, useMemo, useEffect, useCallback } from 'react';
 
 export interface Project {
     id: number;
@@ -9,6 +9,7 @@ export interface Project {
     clientName: string;
     dueDate: string;
     status: 'Not Started' | 'In Progress' | 'Completed';
+    price: number;
 }
 
 const initialProjects: Project[] = [
@@ -16,46 +17,88 @@ const initialProjects: Project[] = [
         id: 1,
         title: 'Pre-Wedding Shoot',
         clientName: 'Alice & Bob',
-        dueDate: new Date(new Date().setDate(new Date().getDate() + 10)).toISOString(),
+        dueDate: new Date(new Date().setDate(new Date().getDate() + 10)).toISOString().split('T')[0],
         status: 'In Progress',
+        price: 1500,
     },
     {
         id: 2,
         title: 'Corporate Headshots',
         clientName: 'TechCorp Inc.',
-        dueDate: new Date(new Date().setDate(new Date().getDate() + 5)).toISOString(),
+        dueDate: new Date(new Date().setDate(new Date().getDate() + 5)).toISOString().split('T')[0],
         status: 'Not Started',
+        price: 800,
     },
     {
         id: 3,
         title: 'Fashion Lookbook',
         clientName: 'StyleWear Co.',
-        dueDate: new Date(new Date().setDate(new Date().getDate() - 2)).toISOString(),
+        dueDate: new Date(new Date().setDate(new Date().getDate() - 2)).toISOString().split('T')[0],
         status: 'Completed',
+        price: 2200,
     },
      {
         id: 4,
         title: 'Product Launch Video',
         clientName: 'Innovate LLC',
-        dueDate: new Date(new Date().setDate(new Date().getDate() + 20)).toISOString(),
+        dueDate: new Date(new Date().setDate(new Date().getDate() + 20)).toISOString().split('T')[0],
         status: 'Not Started',
+        price: 3500,
     },
 ];
 
 interface ProjectContextType {
     projects: Project[];
-    // Future CRUD functions can be added here
+    addProject: (project: Omit<Project, 'id'>) => void;
+    updateProject: (id: number, updates: Partial<Omit<Project, 'id'>>) => void;
+    deleteProject: (id: number) => void;
 }
 
 const ProjectContext = createContext<ProjectContextType | undefined>(undefined);
 
 export function ProjectProvider({ children }: { children: ReactNode }) {
-    const [projects, setProjects] = useState<Project[]>(initialProjects);
+    const [projects, setProjects] = useState<Project[]>([]);
+    const [isInitialized, setIsInitialized] = useState(false);
 
-    // In a real app, you'd have functions to modify projects,
-    // which would also interact with localStorage or a backend.
+    useEffect(() => {
+        try {
+            const storedProjects = localStorage.getItem('projects');
+            if (storedProjects) {
+                setProjects(JSON.parse(storedProjects));
+            } else {
+                setProjects(initialProjects);
+            }
+        } catch (error) {
+            console.error("Failed to load projects from localStorage", error);
+            setProjects(initialProjects);
+        }
+        setIsInitialized(true);
+    }, []);
+
+    useEffect(() => {
+        if (isInitialized) {
+            try {
+                localStorage.setItem('projects', JSON.stringify(projects));
+            } catch (error) {
+                console.error("Failed to write projects to localStorage", error);
+            }
+        }
+    }, [projects, isInitialized]);
+
+    const addProject = useCallback((project: Omit<Project, 'id'>) => {
+        const newProject: Project = { ...project, id: Date.now() };
+        setProjects(prev => [newProject, ...prev]);
+    }, []);
+
+    const updateProject = useCallback((id: number, updates: Partial<Omit<Project, 'id'>>) => {
+        setProjects(prev => prev.map(p => p.id === id ? { ...p, ...updates } : p));
+    }, []);
+
+    const deleteProject = useCallback((id: number) => {
+        setProjects(prev => prev.filter(p => p.id !== id));
+    }, []);
     
-    const value = useMemo(() => ({ projects }), [projects]);
+    const value = useMemo(() => ({ projects, addProject, updateProject, deleteProject }), [projects, addProject, updateProject, deleteProject]);
 
     return (
         <ProjectContext.Provider value={value}>

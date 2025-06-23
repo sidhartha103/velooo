@@ -1,24 +1,29 @@
+
 'use client';
 
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 import { DollarSign, Users, Film } from "lucide-react";
 import { useEmployees } from "@/context/employee-context";
 import { useBookings } from "@/context/booking-context";
+import { useProjects } from "@/context/project-context";
 
 export default function AdminDashboardPage() {
     const { employees } = useEmployees();
     const { bookings } = useBookings();
+    const { projects } = useProjects();
 
     const activeCreators = employees.filter(e => e.status === 'approved').length;
 
     const shootsThisMonth = bookings.filter(booking => {
-        // An invalid date string will result in an invalid Date object
         const bookingDate = new Date(booking.date);
         const now = new Date();
-        // Check if the date is valid before comparing
         if (isNaN(bookingDate.getTime())) return false;
         return bookingDate.getMonth() === now.getMonth() && bookingDate.getFullYear() === now.getFullYear();
     }).length;
+
+    const totalRevenue = projects
+        .filter(p => p.status === 'Completed')
+        .reduce((sum, p) => sum + p.price, 0);
 
     return (
         <div className="space-y-6">
@@ -32,9 +37,11 @@ export default function AdminDashboardPage() {
                         <DollarSign className="h-4 w-4 text-muted-foreground" />
                     </CardHeader>
                     <CardContent>
-                        <div className="text-2xl font-bold">$45,231.89</div>
+                        <div className="text-2xl font-bold">
+                            {new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(totalRevenue)}
+                        </div>
                         <p className="text-xs text-muted-foreground">
-                            (Static data)
+                            From completed projects
                         </p>
                     </CardContent>
                 </Card>
