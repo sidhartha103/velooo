@@ -1,4 +1,3 @@
-
 'use client';
 
 import { usePathname } from 'next/navigation';
@@ -10,6 +9,7 @@ import { ShowcaseProvider } from '@/context/showcase-context';
 import { AdminHeader } from '@/components/admin-header';
 import { TestimonialsProvider } from '@/context/testimonials-context';
 import { EmployeeProvider } from '@/context/employee-context';
+import { BookingProvider } from '@/context/booking-context';
 
 export function RootLayoutClient({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -32,20 +32,22 @@ export function RootLayoutClient({ children }: { children: React.ReactNode }) {
     <ShowcaseProvider>
       <TestimonialsProvider>
         <EmployeeProvider>
-          {isProtectedAdminRoute ? (
-            <div className="min-h-screen flex flex-col">
-              <AdminHeader />
-              <main className="flex-grow container mx-auto p-4 sm:p-6 lg:p-8">
-                {children}
-              </main>
-            </div>
-          ) : (
-            <div className="flex flex-col min-h-screen">
-              <Header />
-              <main className={cn("flex-grow", isAdminLoginPage && "flex items-center justify-center")}>{children}</main>
-              <Footer />
-            </div>
-          )}
+          <BookingProvider>
+            {isProtectedAdminRoute ? (
+              <div className="min-h-screen flex flex-col">
+                <AdminHeader />
+                <main className="flex-grow container mx-auto p-4 sm:p-6 lg:p-8">
+                  {children}
+                </main>
+              </div>
+            ) : (
+              <div className="flex flex-col min-h-screen">
+                <Header />
+                <main className={cn("flex-grow", isAdminLoginPage && "flex items-center justify-center")}>{children}</main>
+                <Footer />
+              </div>
+            )}
+          </BookingProvider>
         </EmployeeProvider>
       </TestimonialsProvider>
     </ShowcaseProvider>

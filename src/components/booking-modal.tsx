@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -11,6 +12,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
+import { useBookings } from '@/context/booking-context';
+import { useToast } from '@/hooks/use-toast';
 
 interface BookingModalProps {
   isOpen: boolean;
@@ -18,8 +21,39 @@ interface BookingModalProps {
 }
 
 export function BookingModal({ isOpen, onOpenChange }: BookingModalProps) {
+  const { addBooking } = useBookings();
+  const { toast } = useToast();
+  
+  const [name, setName] = useState('');
+  const [phone, setPhone] = useState('');
+  const [email, setEmail] = useState('');
+  const [occasion, setOccasion] = useState('');
+  const [date, setDate] = useState('');
+
   const occasions = ["Wedding", "Birthday", "Corporate Event", "Fashion Shoot", "Product Shoot", "Other"];
 
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!name || !phone || !email || !occasion || !date) {
+        toast({
+            variant: 'destructive',
+            title: 'Missing Fields',
+            description: 'Please fill out all required fields.',
+        });
+        return;
+    }
+    addBooking({ name, phone, email, occasion, date });
+    
+    // Reset form
+    setName('');
+    setPhone('');
+    setEmail('');
+    setOccasion('');
+    setDate('');
+
+    onOpenChange(false);
+  };
+  
   const handleRequestCall = () => {
     console.log("Call requested!");
     onOpenChange(false);
@@ -31,22 +65,22 @@ export function BookingModal({ isOpen, onOpenChange }: BookingModalProps) {
         <DialogHeader>
           <DialogTitle className="text-center text-2xl">Submit Enquiry</DialogTitle>
         </DialogHeader>
-        <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
+        <form className="space-y-4" onSubmit={handleSubmit}>
           <div>
             <Label htmlFor="fullName">Full Name *</Label>
-            <Input type="text" id="fullName" className="bg-background border-border" />
+            <Input type="text" id="fullName" value={name} onChange={(e) => setName(e.target.value)} className="bg-background border-border" />
           </div>
           <div>
             <Label htmlFor="contactNumber">Contact Number *</Label>
-            <Input type="tel" id="contactNumber" className="bg-background border-border" />
+            <Input type="tel" id="contactNumber" value={phone} onChange={(e) => setPhone(e.target.value)} className="bg-background border-border" />
           </div>
           <div>
             <Label htmlFor="email">Email Address *</Label>
-            <Input type="email" id="email" className="bg-background border-border" />
+            <Input type="email" id="email" value={email} onChange={(e) => setEmail(e.target.value)} className="bg-background border-border" />
           </div>
           <div>
             <Label htmlFor="occasion">Occasion *</Label>
-            <Select>
+            <Select onValueChange={setOccasion} value={occasion}>
               <SelectTrigger id="occasion" className="bg-background border-border">
                 <SelectValue placeholder="Select occasion" />
               </SelectTrigger>
@@ -57,7 +91,7 @@ export function BookingModal({ isOpen, onOpenChange }: BookingModalProps) {
           </div>
           <div>
             <Label htmlFor="date">Date of the occasion *</Label>
-            <Input type="date" id="date" className="bg-background border-border" />
+            <Input type="date" id="date" value={date} onChange={(e) => setDate(e.target.value)} className="bg-background border-border" />
           </div>
           <Button type="submit" className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-semibold">
             Submit Enquiry
