@@ -8,7 +8,6 @@ export function Footer() {
         <footer className="py-8 mt-20 border-t border-border/20">
             <div className="container mx-auto px-4 text-center text-muted-foreground">
                 <div className="flex flex-wrap justify-center items-center space-x-4 sm:space-x-6 mb-4">
-                    <Link href="/employee/register" className="hover:text-primary transition-colors">Employee Portal</Link>
                     <Link href="#" className="hover:text-primary transition-colors">Press & Blog</Link>
                     <Link href="#" className="hover:text-primary transition-colors">Privacy</Link>
                     <Link href="#" className="hover:text-primary transition-colors">Terms</Link>
