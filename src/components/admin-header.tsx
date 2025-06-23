@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { LayoutDashboard, Lightbulb, Menu, User, LogOut, Clapperboard, MessageSquare, Users, CalendarCheck } from 'lucide-react';
+import { LayoutDashboard, Lightbulb, Menu, User, LogOut, Clapperboard, MessageSquare, Users, CalendarCheck, Briefcase } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from './ui/button';
 import { Sheet, SheetContent, SheetTrigger, SheetClose } from '@/components/ui/sheet';
@@ -27,6 +27,7 @@ export function AdminHeader() {
         { href: '/admin/showcase', icon: Clapperboard, label: 'Showcase' },
         { href: '/admin/feedback', icon: MessageSquare, label: 'Feedback' },
         { href: '/admin/employees', icon: Users, label: 'Employees' },
+        { href: '/admin/working-employees', icon: Briefcase, label: 'Working Employees' },
     ];
 
     const handleLogout = () => {
