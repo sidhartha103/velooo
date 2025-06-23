@@ -16,7 +16,7 @@ export function CreatorShowcase({ className }: { className?: string }) {
         <section className={cn("py-20", className)}>
             <div className="container mx-auto px-4">
                 <div className="text-center mb-12">
-                    <h2 className="text-4xl font-bold">Creator <span className="text-primary">Showcase</span></h2>
+                    <h2 className="text-3xl sm:text-4xl font-bold">Creator <span className="text-primary">Showcase</span></h2>
                     <p className="text-muted-foreground mt-4 text-lg">A glimpse into the stunning content our creators produce.</p>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">

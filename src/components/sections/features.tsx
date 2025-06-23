@@ -11,7 +11,7 @@ export function Features({ title = "What Sets Us Apart", className }: FeaturesPr
     return (
         <section className={cn("py-20", className)}>
             <div className="container mx-auto px-4">
-                <h2 className="text-4xl font-bold text-center mb-12">{title}</h2>
+                <h2 className="text-3xl sm:text-4xl font-bold text-center mb-12">{title}</h2>
                 <div className="grid md:grid-cols-3 gap-8">
                     <FeatureCard icon={<Rocket />} title="Lightning-Fast Delivery" description="From shoot to social in minutes. Get your edited reels delivered in 10 minutes flat." />
                     <FeatureCard icon={<Diamond />} title="Cinematic Quality" description="Our pros use top-tier gear and techniques to make your content shine." />

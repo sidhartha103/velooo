@@ -8,7 +8,7 @@ export default function FeaturesPage() {
         <div className="min-h-screen">
             <main className="pt-24 container mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="text-center my-16">
-                    <h1 className="text-5xl md:text-7xl font-bold text-foreground mt-2">Your Content, <span className="text-primary">Supercharged.</span></h1>
+                    <h1 className="text-4xl sm:text-5xl md:text-7xl font-bold text-foreground mt-2">Your Content, <span className="text-primary">Supercharged.</span></h1>
                     <div className="mt-8 flex justify-center">
                         <div className="w-full max-w-3xl aspect-video bg-card border-4 border-border rounded-xl flex items-center justify-center p-2 shadow-lg">
                            <Image src="https://placehold.co/600x400.png" alt="App Screenshot" width={600} height={338} className="rounded-lg w-full h-auto" data-ai-hint="app interface" />

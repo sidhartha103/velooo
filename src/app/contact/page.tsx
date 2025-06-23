@@ -6,7 +6,7 @@ export default function ContactPage() {
         <div className="min-h-screen">
             <main className="pt-24 container mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="text-center my-12">
-                    <h1 className="text-4xl md:text-5xl font-bold text-foreground">Get In <span className="text-primary">Touch</span></h1>
+                    <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-foreground">Get In <span className="text-primary">Touch</span></h1>
                     <p className="text-muted-foreground mt-4 text-lg">We'd love to hear from you. Here's how you can reach us.</p>
                 </div>
 

@@ -17,7 +17,7 @@ export default function DiscoverPage() {
         <div className="min-h-screen">
             <main className="pt-24 container mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="text-center my-12">
-                    <h1 className="text-4xl md:text-5xl font-bold text-foreground">The Creator <span className="text-primary">Showcase</span></h1>
+                    <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-foreground">The Creator <span className="text-primary">Showcase</span></h1>
                     <p className="text-muted-foreground mt-4 text-lg">Dive into a world of incredible content.</p>
                 </div>
 

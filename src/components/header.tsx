@@ -3,9 +3,10 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Home, GalleryHorizontal, Wand2, AtSign } from 'lucide-react';
+import { Home, GalleryHorizontal, Wand2, AtSign, Menu } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from './ui/button';
+import { Sheet, SheetContent, SheetTrigger, SheetClose } from '@/components/ui/sheet';
 
 export function Header() {
     const [isScrolled, setIsScrolled] = useState(false);
@@ -54,7 +55,39 @@ export function Header() {
                         </nav>
                     </div>
 
-                    <div></div>
+                    <div>
+                        <div className="md:hidden">
+                            <Sheet>
+                                <SheetTrigger asChild>
+                                    <Button variant="ghost" size="icon">
+                                        <Menu className="h-6 w-6" />
+                                        <span className="sr-only">Open menu</span>
+                                    </Button>
+                                </SheetTrigger>
+                                <SheetContent side="right" className="w-[300px] bg-card border-l-border p-0 pt-8">
+                                    <nav className="flex flex-col gap-4 px-4">
+                                        {navItems.map((item) => (
+                                            <SheetClose asChild key={item.href}>
+                                                <Link
+                                                    href={item.href}
+                                                    className={cn(
+                                                        "flex items-center gap-4 p-3 rounded-lg text-lg transition-colors",
+                                                        pathname === item.href
+                                                            ? 'bg-primary text-primary-foreground'
+                                                            : 'hover:bg-accent/20'
+                                                    )}
+                                                >
+                                                    <item.icon size={24} />
+                                                    <span>{item.label}</span>
+                                                </Link>
+                                            </SheetClose>
+                                        ))}
+                                    </nav>
+                                </SheetContent>
+                            </Sheet>
+                        </div>
+                        <div className="hidden md:block w-10 h-10" />
+                    </div>
                 </div>
             </div>
         </header>

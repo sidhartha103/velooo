@@ -34,7 +34,7 @@ export function FAQ({ className }: { className?: string }) {
         <section className={cn("py-20", className)}>
             <div className="container mx-auto px-4">
                 <div className="text-center mb-12">
-                    <h2 className="text-4xl font-bold">Frequently Asked <span className="text-primary">Questions</span></h2>
+                    <h2 className="text-3xl sm:text-4xl font-bold">Frequently Asked <span className="text-primary">Questions</span></h2>
                     <p className="text-muted-foreground mt-4 text-lg">
                         Have questions? We have answers. If you can't find what you're looking for, feel free to contact us.
                     </p>

@@ -33,7 +33,7 @@ export function Testimonials({ className }: { className?: string }) {
         <section className={cn("py-20", className)}>
             <div className="container mx-auto px-4">
                 <div className="text-center mb-12">
-                    <h2 className="text-4xl font-bold">What Our <span className="text-primary">Partners Say</span></h2>
+                    <h2 className="text-3xl sm:text-4xl font-bold">What Our <span className="text-primary">Partners Say</span></h2>
                     <p className="text-muted-foreground mt-4 text-lg">Real stories from creators and clients who love VeloShoot.</p>
                 </div>
                 <div className="relative w-full overflow-hidden [mask-image:linear-gradient(to_right,transparent,white_10%,white_90%,transparent)]">
