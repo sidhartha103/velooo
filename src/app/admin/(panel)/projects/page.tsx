@@ -153,7 +153,7 @@ function ProjectList({ projects, onEdit, onDelete }: ProjectListProps) {
                         </div>
                         <div className="flex items-center gap-2 text-sm text-muted-foreground">
                             <DollarSign className="h-4 w-4" />
-                            <span>{new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(project.price)}</span>
+                            <span>{new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(project.price)}</span>
                         </div>
                     </CardContent>
                     <CardFooter className="justify-end gap-2">
@@ -235,8 +235,8 @@ function ProjectForm({ project, onClose, onSubmit }: ProjectFormProps) {
                     <Input id="dueDate" type="date" value={dueDate} onChange={e => setDueDate(e.target.value)} required />
                 </div>
                  <div className="space-y-2">
-                    <Label htmlFor="price">Price (USD)</Label>
-                    <Input id="price" type="number" value={price} onChange={e => setPrice(e.target.value)} required placeholder="e.g. 1500" />
+                    <Label htmlFor="price">Price (INR)</Label>
+                    <Input id="price" type="number" value={price} onChange={e => setPrice(e.target.value)} required placeholder="e.g. 100000" />
                 </div>
             </div>
             <div className="space-y-2">
