@@ -86,6 +86,6 @@
     background-repeat: no-repeat;
   }
   body.admin-body {
-    background-image: radial-gradient(ellipse at top, hsla(var(--primary), 0.25), transparent 70%);
+    background-image: radial-gradient(ellipse at top, hsl(6, 68%, 20%), transparent 70%);
   }
 }
