@@ -4,10 +4,12 @@ import { usePathname } from 'next/navigation';
 import { Header } from '@/components/header';
 import { Footer } from '@/components/footer';
 import React, { useEffect } from "react";
+import { cn } from '@/lib/utils';
 
 export function RootLayoutClient({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const isProtectedAdminRoute = pathname.startsWith('/admin') && pathname !== '/admin/login';
+  const isAdminLoginPage = pathname === '/admin/login';
 
   useEffect(() => {
     if (isProtectedAdminRoute) {
@@ -28,7 +30,7 @@ export function RootLayoutClient({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex flex-col min-h-screen">
       <Header />
-      <main className="flex-grow">{children}</main>
+      <main className={cn("flex-grow", isAdminLoginPage && "flex items-center justify-center")}>{children}</main>
       <Footer />
     </div>
   );
