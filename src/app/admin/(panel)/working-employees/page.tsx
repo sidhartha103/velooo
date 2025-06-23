@@ -3,7 +3,7 @@
 import { useEmployees, type Employee } from '@/context/employee-context';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
-import { Users, Briefcase, PlusCircle, Pencil, Trash2 } from 'lucide-react';
+import { Users, Briefcase, PlusCircle, Pencil, Trash2, Search } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
     Dialog,
@@ -18,17 +18,27 @@ import {
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useToast } from '@/hooks/use-toast';
 
 export default function WorkingEmployeesPage() {
     const { employees, addApprovedEmployee, updateEmployee, deleteEmployee } = useEmployees();
     const { toast } = useToast();
 
-    const workingEmployees = employees.filter(e => e.status === 'approved');
-
+    const [searchQuery, setSearchQuery] = useState('');
     const [isAddModalOpen, setIsAddModalOpen] = useState(false);
     const [employeeToEdit, setEmployeeToEdit] = useState<Employee | null>(null);
+
+    const workingEmployees = useMemo(() => {
+        return employees
+            .filter(e => e.status === 'approved')
+            .filter(e => 
+                e.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                e.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                e.role.toLowerCase().includes(searchQuery.toLowerCase())
+            );
+    }, [employees, searchQuery]);
+
 
     const handleDelete = (id: number) => {
         deleteEmployee(id);
@@ -41,34 +51,11 @@ export default function WorkingEmployeesPage() {
     
     return (
         <div className="space-y-6">
-            <div className="flex justify-between items-center">
+            <div className="flex justify-between items-start">
                 <h1 className="text-3xl font-bold flex items-center gap-3">
                     <Briefcase className="h-8 w-8 text-primary" />
                     Working Employees
                 </h1>
-                <Dialog open={isAddModalOpen} onOpenChange={setIsAddModalOpen}>
-                    <DialogTrigger asChild>
-                        <Button>
-                            <PlusCircle className="mr-2 h-4 w-4" />
-                            Add Employee
-                        </Button>
-                    </DialogTrigger>
-                    <DialogContent>
-                        <DialogHeader>
-                            <DialogTitle>Add New Employee</DialogTitle>
-                            <DialogDescription>
-                                Add a new creator directly to the active roster. They will be approved automatically.
-                            </DialogDescription>
-                        </DialogHeader>
-                        <EmployeeForm 
-                            onClose={() => setIsAddModalOpen(false)} 
-                            onSubmit={(data) => {
-                                addApprovedEmployee(data);
-                                toast({ title: 'Employee Added', description: 'The new employee has been added and approved.' });
-                            }} 
-                        />
-                    </DialogContent>
-                </Dialog>
             </div>
             
             <Card>
@@ -77,6 +64,41 @@ export default function WorkingEmployeesPage() {
                     <CardDescription>This is a list of all approved creators currently working with VeloShoot.</CardDescription>
                 </CardHeader>
                 <CardContent>
+                    <div className="flex flex-col sm:flex-row items-center gap-4 mb-4">
+                        <div className="relative flex-grow w-full">
+                            <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+                            <Input
+                                placeholder="Search by name, email, or role..."
+                                value={searchQuery}
+                                onChange={(e) => setSearchQuery(e.target.value)}
+                                className="pl-8 w-full"
+                            />
+                        </div>
+                         <Dialog open={isAddModalOpen} onOpenChange={setIsAddModalOpen}>
+                            <DialogTrigger asChild>
+                                <Button className="w-full sm:w-auto">
+                                    <PlusCircle className="mr-2 h-4 w-4" />
+                                    Add Employee
+                                </Button>
+                            </DialogTrigger>
+                            <DialogContent>
+                                <DialogHeader>
+                                    <DialogTitle>Add New Employee</DialogTitle>
+                                    <DialogDescription>
+                                        Add a new creator directly to the active roster. They will be approved automatically.
+                                    </DialogDescription>
+                                </DialogHeader>
+                                <EmployeeForm 
+                                    onClose={() => setIsAddModalOpen(false)} 
+                                    onSubmit={(data) => {
+                                        addApprovedEmployee(data);
+                                        toast({ title: 'Employee Added', description: 'The new employee has been added and approved.' });
+                                    }} 
+                                />
+                            </DialogContent>
+                        </Dialog>
+                    </div>
+
                     {workingEmployees.length > 0 ? (
                         <div className="space-y-4">
                             {workingEmployees.map(employee => (
@@ -107,7 +129,7 @@ export default function WorkingEmployeesPage() {
                     ) : (
                         <div className="text-center text-muted-foreground py-12">
                             <Users className="mx-auto h-12 w-12" />
-                            <p className="mt-4">No working employees found.</p>
+                            <p className="mt-4">{searchQuery ? 'No employees match your search.' : 'No working employees found.'}</p>
                         </div>
                     )}
                 </CardContent>
