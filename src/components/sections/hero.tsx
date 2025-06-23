@@ -10,7 +10,7 @@ export function Hero({ onBookNowClick }: HeroProps) {
             <div className="container mx-auto px-4">
                 <p className="text-lg text-muted-foreground">Reels, Ready in a</p>
                 <h1 className="text-6xl md:text-8xl font-bold my-4">
-                    <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent"> Snap. </span>
+                    <span className="bg-gradient-to-r from-white to-slate-400 bg-clip-text text-transparent"> Snap. </span>
                 </h1>
                 <Button onClick={onBookNowClick} size="lg" className="bg-primary hover:bg-primary/90 mt-6 px-10 py-3 text-lg font-semibold">
                     Book a Shoot Now
