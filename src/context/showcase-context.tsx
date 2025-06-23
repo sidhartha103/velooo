@@ -32,33 +32,20 @@ const ShowcaseContext = createContext<ShowcaseContextType | undefined>(undefined
 
 export function ShowcaseProvider({ children }: { children: ReactNode }) {
     const [reels, setReels] = useState<Reel[]>(initialReels);
-    const [isInitialized, setIsInitialized] = useState(false);
 
     useEffect(() => {
         try {
             const storedReels = localStorage.getItem('showcaseReels');
             if (storedReels) {
                 setReels(JSON.parse(storedReels));
+            } else {
+                localStorage.setItem('showcaseReels', JSON.stringify(initialReels));
             }
         } catch (error) {
             console.error("Failed to load reels from localStorage", error);
             setReels(initialReels);
         }
-        setIsInitialized(true);
     }, []);
-
-    useEffect(() => {
-        if (isInitialized) {
-            try {
-                // Filter out temporary blob URLs before saving to localStorage
-                const persistentReels = reels.filter(reel => !reel.src.startsWith('blob:'));
-                localStorage.setItem('showcaseReels', JSON.stringify(persistentReels));
-            } catch (error) {
-                console.error("Failed to save reels to localStorage. Changes to new uploads won't be persisted.", error);
-            }
-        }
-    }, [reels, isInitialized]);
-
 
     const addReel = useCallback((reel: Omit<Reel, 'id'>) => {
         const newReel = { ...reel, id: Date.now() };
@@ -66,7 +53,16 @@ export function ShowcaseProvider({ children }: { children: ReactNode }) {
     }, []);
 
     const deleteReel = useCallback((id: number) => {
-        setReels(prevReels => prevReels.filter(reel => reel.id !== id));
+        setReels(prevReels => {
+            const newReels = prevReels.filter(reel => reel.id !== id);
+            try {
+                const persistentReels = newReels.filter(r => !r.src.startsWith('blob:'));
+                localStorage.setItem('showcaseReels', JSON.stringify(persistentReels));
+            } catch (error) {
+                console.error("Failed to save reels to localStorage after deletion.", error);
+            }
+            return newReels;
+        });
     }, []);
 
     const value = useMemo(() => ({ reels, addReel, deleteReel }), [reels, addReel, deleteReel]);
