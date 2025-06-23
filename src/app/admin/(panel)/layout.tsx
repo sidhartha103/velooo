@@ -35,7 +35,7 @@ export default function AdminPanelLayout({
                     </SidebarMenu>
                 </SidebarContent>
             </Sidebar>
-            <SidebarInset>
+            <SidebarInset className="bg-transparent">
                 <div className="p-4 sm:p-6 lg:p-8">
                     <div className="md:hidden mb-4">
                         <SidebarTrigger />

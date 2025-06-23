@@ -85,4 +85,7 @@
     background-attachment: fixed;
     background-repeat: no-repeat;
   }
+  body.admin-body {
+    background-image: radial-gradient(ellipse at top, hsla(var(--primary), 0.25), transparent 70%);
+  }
 }
