@@ -80,6 +80,7 @@ export default function EmployeeRegistrationPage() {
                                         <SelectItem value="Drone Operator">Drone Operator</SelectItem>
                                     </SelectContent>
                                 </Select>
+                                <p className="text-sm text-muted-foreground pt-1">Let us know what you do best.</p>
                             </div>
                             <Button type="submit" className="w-full bg-primary hover:bg-primary/90">Submit Application</Button>
                         </form>
