@@ -9,7 +9,7 @@ export function Testimonials({ className }: { className?: string }) {
             role: "Fashion Influencer",
             avatar: "https://placehold.co/100x100.png",
             hint: "woman portrait",
-            text: "VeloStream is a game-changer. The 10-minute turnaround for high-quality reels is unheard of. It's completely streamlined my content creation process!"
+            text: "VeloShoot is a game-changer. The 10-minute turnaround for high-quality reels is unheard of. It's completely streamlined my content creation process!"
         },
         {
             name: "David C.",
@@ -34,7 +34,7 @@ export function Testimonials({ className }: { className?: string }) {
             <div className="container mx-auto px-4">
                 <div className="text-center mb-12">
                     <h2 className="text-4xl font-bold">What Our <span className="text-primary">Partners Say</span></h2>
-                    <p className="text-muted-foreground mt-4 text-lg">Real stories from creators and clients who love VeloStream.</p>
+                    <p className="text-muted-foreground mt-4 text-lg">Real stories from creators and clients who love VeloShoot.</p>
                 </div>
                 <div className="relative w-full overflow-hidden [mask-image:linear-gradient(to_right,transparent,white_10%,white_90%,transparent)]">
                     <div className="flex w-max animate-scroll-x hover:[animation-play-state:paused]">

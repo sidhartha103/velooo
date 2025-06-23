@@ -13,7 +13,7 @@ export function Footer() {
                     <a href="https://www.instagram.com" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors"><Instagram /></a>
                     <a href="https://wa.me/918985956855" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors"><WhatsAppIcon /></a>
                 </div>
-                <p>© {new Date().getFullYear()} VeloStream. All rights reserved.</p>
+                <p>© {new Date().getFullYear()} VeloShoot. All rights reserved.</p>
             </div>
         </footer>
     );

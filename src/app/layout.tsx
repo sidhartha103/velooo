@@ -5,7 +5,7 @@ import { Header } from '@/components/header';
 import { Footer } from '@/components/footer';
 
 export const metadata: Metadata = {
-  title: 'VeloStream',
+  title: 'VeloShoot',
   description: 'Reels, Ready in a Snap.',
 };
 

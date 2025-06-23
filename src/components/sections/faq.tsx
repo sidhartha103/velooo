@@ -8,8 +8,8 @@ import { cn } from "@/lib/utils"
 
 const faqs = [
     {
-        question: "What is VeloStream?",
-        answer: "VeloStream is a platform that connects you with professional creators to produce high-quality reel content in just 10 minutes. We handle everything from booking to delivery, so you can focus on your brand."
+        question: "What is VeloShoot?",
+        answer: "VeloShoot is a platform that connects you with professional creators to produce high-quality reel content in just 10 minutes. We handle everything from booking to delivery, so you can focus on your brand."
     },
     {
         question: "How fast is the turnaround time?",
@@ -17,7 +17,7 @@ const faqs = [
     },
     {
         question: "What kind of events can I book a creator for?",
-        answer: "You can book a VeloStream creator for a wide range of events, including fashion shoots, product launches, corporate events, weddings, concerts, and even casual content for your social media channels."
+        answer: "You can book a VeloShoot creator for a wide range of events, including fashion shoots, product launches, corporate events, weddings, concerts, and even casual content for your social media channels."
     },
     {
         question: "Are the creators professionals?",
@@ -25,7 +25,7 @@ const faqs = [
     },
     {
         question: "How does the complimentary shoot work?",
-        answer: "Your first shoot with us is on the house! It's a no-strings-attached way for you to experience the VeloStream difference. Just sign up, book your free shoot, and see the magic for yourself."
+        answer: "Your first shoot with us is on the house! It's a no-strings-attached way for you to experience the VeloShoot difference. Just sign up, book your free shoot, and see the magic for yourself."
     }
 ]
 
