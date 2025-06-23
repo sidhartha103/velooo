@@ -31,6 +31,8 @@ const initialEmployees: Employee[] = [
 interface EmployeeContextType {
     employees: Employee[];
     addEmployee: (employee: Omit<Employee, 'id' | 'status'>) => void;
+    addApprovedEmployee: (employee: Omit<Employee, 'id' | 'status'>) => void;
+    updateEmployee: (id: number, updates: Partial<Omit<Employee, 'id' | 'status'>>) => void;
     approveEmployee: (id: number) => void;
     deleteEmployee: (id: number) => void;
 }
@@ -69,6 +71,15 @@ export function EmployeeProvider({ children }: { children: ReactNode }) {
         const newEmployee: Employee = { ...employee, id: Date.now(), status: 'pending' };
         setEmployees(prev => [newEmployee, ...prev]);
     }, []);
+
+    const addApprovedEmployee = useCallback((employee: Omit<Employee, 'id' | 'status'>) => {
+        const newEmployee: Employee = { ...employee, id: Date.now(), status: 'approved' };
+        setEmployees(prev => [newEmployee, ...prev]);
+    }, []);
+
+    const updateEmployee = useCallback((id: number, updates: Partial<Omit<Employee, 'id' | 'status'>>) => {
+        setEmployees(prev => prev.map(e => e.id === id ? { ...e, ...updates } : e));
+    }, []);
     
     const approveEmployee = useCallback((id: number) => {
         setEmployees(prev => prev.map(e => e.id === id ? { ...e, status: 'approved' } : e));
@@ -78,7 +89,7 @@ export function EmployeeProvider({ children }: { children: ReactNode }) {
         setEmployees(prev => prev.filter(e => e.id !== id));
     }, []);
     
-    const value = useMemo(() => ({ employees, addEmployee, approveEmployee, deleteEmployee }), [employees, addEmployee, approveEmployee, deleteEmployee]);
+    const value = useMemo(() => ({ employees, addEmployee, addApprovedEmployee, updateEmployee, approveEmployee, deleteEmployee }), [employees, addEmployee, addApprovedEmployee, updateEmployee, approveEmployee, deleteEmployee]);
 
     return (
         <EmployeeContext.Provider value={value}>
