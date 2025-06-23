@@ -5,6 +5,7 @@ import { Header } from '@/components/header';
 import { Footer } from '@/components/footer';
 import React, { useEffect } from "react";
 import { cn } from '@/lib/utils';
+import { ShowcaseProvider } from '@/context/showcase-context';
 
 export function RootLayoutClient({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -23,15 +24,23 @@ export function RootLayoutClient({ children }: { children: React.ReactNode }) {
     }
   }, [isProtectedAdminRoute]);
 
-  if (isProtectedAdminRoute) {
-    return <>{children}</>;
+  const MainContent = () => {
+    if (isProtectedAdminRoute) {
+      return <>{children}</>;
+    }
+    
+    return (
+      <div className="flex flex-col min-h-screen">
+        <Header />
+        <main className={cn("flex-grow", isAdminLoginPage && "flex items-center justify-center")}>{children}</main>
+        <Footer />
+      </div>
+    );
   }
 
   return (
-    <div className="flex flex-col min-h-screen">
-      <Header />
-      <main className={cn("flex-grow", isAdminLoginPage && "flex items-center justify-center")}>{children}</main>
-      <Footer />
-    </div>
-  );
+    <ShowcaseProvider>
+      <MainContent />
+    </ShowcaseProvider>
+  )
 }
