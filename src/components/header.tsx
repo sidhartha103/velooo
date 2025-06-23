@@ -27,7 +27,6 @@ export function Header() {
         { href: '/', icon: Home, label: 'Home' },
         { href: '/discover', icon: GalleryHorizontal, label: 'Discover' },
         { href: '/features', icon: Wand2, label: 'Features' },
-        { href: '/planner', icon: Lightbulb, label: 'Planner' },
         { href: '/contact', icon: AtSign, label: 'Contact' },
     ];
 
