@@ -1,6 +1,6 @@
 'use client';
 
-import React, { createContext, useContext, useState, ReactNode } from 'react';
+import React, { createContext, useContext, useState, ReactNode, useEffect, useCallback, useMemo } from 'react';
 
 const initialReels = [
     { id: 1, src: "https://placehold.co/400x600.png", category: "Events & Weddings", hint: "wedding event", isVideo: false },
@@ -32,17 +32,44 @@ const ShowcaseContext = createContext<ShowcaseContextType | undefined>(undefined
 
 export function ShowcaseProvider({ children }: { children: ReactNode }) {
     const [reels, setReels] = useState<Reel[]>(initialReels);
+    const [isInitialized, setIsInitialized] = useState(false);
 
-    const addReel = (reel: Omit<Reel, 'id'>) => {
+    useEffect(() => {
+        try {
+            const storedReels = localStorage.getItem('showcaseReels');
+            if (storedReels) {
+                setReels(JSON.parse(storedReels));
+            }
+        } catch (error) {
+            console.error("Failed to load reels from localStorage", error);
+            setReels(initialReels);
+        }
+        setIsInitialized(true);
+    }, []);
+
+    useEffect(() => {
+        if (isInitialized) {
+            try {
+                // Filter out temporary blob URLs before saving to localStorage
+                const persistentReels = reels.filter(reel => !reel.src.startsWith('blob:'));
+                localStorage.setItem('showcaseReels', JSON.stringify(persistentReels));
+            } catch (error) {
+                console.error("Failed to save reels to localStorage. Changes to new uploads won't be persisted.", error);
+            }
+        }
+    }, [reels, isInitialized]);
+
+
+    const addReel = useCallback((reel: Omit<Reel, 'id'>) => {
         const newReel = { ...reel, id: Date.now() };
         setReels(prevReels => [newReel, ...prevReels]);
-    };
+    }, []);
 
-    const deleteReel = (id: number) => {
+    const deleteReel = useCallback((id: number) => {
         setReels(prevReels => prevReels.filter(reel => reel.id !== id));
-    };
+    }, []);
 
-    const value = { reels, addReel, deleteReel };
+    const value = useMemo(() => ({ reels, addReel, deleteReel }), [reels, addReel, deleteReel]);
 
     return (
         <ShowcaseContext.Provider value={value}>
