@@ -1,4 +1,3 @@
-
 "use client";
 
 import React, { useState, useEffect } from 'react';
@@ -44,7 +43,7 @@ export function Header() {
                     </Link>
                     
                     <div className="absolute left-1/2 -translate-x-1/2 hidden md:block">
-                        <nav className="flex items-center space-x-2 bg-black/20 rounded-full p-1 border border-white/10">
+                        <nav className="flex items-center space-x-2 rounded-full p-1">
                             {navItems.map((item) => (
                                 <Link key={item.href} href={item.href}
                                     className={cn(
