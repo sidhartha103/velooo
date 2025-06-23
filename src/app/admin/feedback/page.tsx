@@ -6,11 +6,11 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { ThumbsUp, ThumbsDown, MessageSquare } from 'lucide-react';
+import { ThumbsUp, ThumbsDown, MessageSquare, Trash2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
 export default function FeedbackManagementPage() {
-    const { testimonials, approveTestimonial, rejectTestimonial } = useTestimonials();
+    const { testimonials, approveTestimonial, rejectTestimonial, deleteTestimonial } = useTestimonials();
     const { toast } = useToast();
 
     const pending = testimonials.filter(t => t.status === 'pending');
@@ -25,6 +25,15 @@ export default function FeedbackManagementPage() {
     const handleReject = (id: number) => {
         rejectTestimonial(id);
         toast({ title: 'Feedback Rejected' });
+    };
+
+    const handleDelete = (id: number) => {
+        deleteTestimonial(id);
+        toast({
+            variant: 'destructive',
+            title: 'Feedback Deleted',
+            description: 'The testimonial has been permanently removed.',
+        });
     };
 
     return (
@@ -43,6 +52,7 @@ export default function FeedbackManagementPage() {
                         description="Review the following submissions."
                         onApprove={handleApprove}
                         onReject={handleReject}
+                        onDelete={handleDelete}
                     />
                 </TabsContent>
                 <TabsContent value="approved">
@@ -50,6 +60,7 @@ export default function FeedbackManagementPage() {
                         testimonials={approved}
                         title="Approved Feedback"
                         description="These testimonials are live on your site."
+                        onDelete={handleDelete}
                     />
                 </TabsContent>
                 <TabsContent value="rejected">
@@ -57,6 +68,7 @@ export default function FeedbackManagementPage() {
                         testimonials={rejected}
                         title="Rejected Feedback"
                         description="These submissions were not approved."
+                        onDelete={handleDelete}
                     />
                 </TabsContent>
             </Tabs>
@@ -70,9 +82,10 @@ interface FeedbackListProps {
     description: string;
     onApprove?: (id: number) => void;
     onReject?: (id: number) => void;
+    onDelete?: (id: number) => void;
 }
 
-function FeedbackList({ testimonials, title, description, onApprove, onReject }: FeedbackListProps) {
+function FeedbackList({ testimonials, title, description, onApprove, onReject, onDelete }: FeedbackListProps) {
     if (testimonials.length === 0) {
         return (
             <Card>
@@ -112,16 +125,26 @@ function FeedbackList({ testimonials, title, description, onApprove, onReject }:
                         <CardContent>
                             <p className="text-foreground">"{testimonial.text}"</p>
                         </CardContent>
-                        {onApprove && onReject && (
+                        {(onApprove || onReject || onDelete) && (
                             <CardFooter className="justify-end gap-2">
-                                <Button variant="outline" size="sm" onClick={() => onReject(testimonial.id)}>
-                                    <ThumbsDown className="mr-2 h-4 w-4" />
-                                    Reject
-                                </Button>
-                                <Button size="sm" onClick={() => onApprove(testimonial.id)}>
-                                    <ThumbsUp className="mr-2 h-4 w-4" />
-                                    Approve
-                                </Button>
+                                {onReject && (
+                                    <Button variant="outline" size="sm" onClick={() => onReject(testimonial.id)}>
+                                        <ThumbsDown className="mr-2 h-4 w-4" />
+                                        Reject
+                                    </Button>
+                                )}
+                                {onApprove && (
+                                    <Button size="sm" onClick={() => onApprove(testimonial.id)}>
+                                        <ThumbsUp className="mr-2 h-4 w-4" />
+                                        Approve
+                                    </Button>
+                                )}
+                                {onDelete && (
+                                    <Button variant="destructive" size="sm" onClick={() => onDelete(testimonial.id)}>
+                                        <Trash2 className="mr-2 h-4 w-4" />
+                                        Delete
+                                    </Button>
+                                )}
                             </CardFooter>
                         )}
                     </Card>

@@ -57,6 +57,7 @@ interface TestimonialsContextType {
     addTestimonial: (testimonial: Omit<Testimonial, 'id' | 'status'>) => void;
     approveTestimonial: (id: number) => void;
     rejectTestimonial: (id: number) => void;
+    deleteTestimonial: (id: number) => void;
 }
 
 const TestimonialsContext = createContext<TestimonialsContextType | undefined>(undefined);
@@ -108,7 +109,11 @@ export function TestimonialsProvider({ children }: { children: ReactNode }) {
         updateTestimonialStatus(id, 'rejected');
     }, [updateTestimonialStatus]);
 
-    const value = useMemo(() => ({ testimonials, addTestimonial, approveTestimonial, rejectTestimonial }), [testimonials, addTestimonial, approveTestimonial, rejectTestimonial]);
+    const deleteTestimonial = useCallback((id: number) => {
+        setTestimonials(prev => prev.filter(t => t.id !== id));
+    }, []);
+
+    const value = useMemo(() => ({ testimonials, addTestimonial, approveTestimonial, rejectTestimonial, deleteTestimonial }), [testimonials, addTestimonial, approveTestimonial, rejectTestimonial, deleteTestimonial]);
 
     return (
         <TestimonialsContext.Provider value={value}>
