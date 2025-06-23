@@ -1,7 +1,7 @@
 
 'use client';
 
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { Header } from '@/components/header';
 import { Footer } from '@/components/footer';
 import React, { useEffect } from "react";
@@ -12,11 +12,23 @@ import { TestimonialsProvider } from '@/context/testimonials-context';
 import { EmployeeProvider } from '@/context/employee-context';
 import { BookingProvider } from '@/context/booking-context';
 import { ProjectProvider } from '@/context/project-context';
+import { AuthProvider, useAuth } from '@/context/auth-context';
+import { Loader2 } from 'lucide-react';
 
-export function RootLayoutClient({ children }: { children: React.ReactNode }) {
+function AuthGuard({ children }: { children: React.ReactNode }) {
+  const { isAuthenticated, isLoading } = useAuth();
+  const router = useRouter();
   const pathname = usePathname();
   const isProtectedAdminRoute = pathname.startsWith('/admin') && pathname !== '/admin/login';
-  const isAdminLoginPage = pathname === '/admin/login';
+
+  useEffect(() => {
+    if (!isLoading && !isAuthenticated && isProtectedAdminRoute) {
+      router.push('/admin/login');
+    }
+    if (!isLoading && isAuthenticated && pathname === '/admin/login') {
+      router.push('/admin');
+    }
+  }, [isLoading, isAuthenticated, isProtectedAdminRoute, pathname, router]);
 
   useEffect(() => {
     if (isProtectedAdminRoute) {
@@ -24,36 +36,65 @@ export function RootLayoutClient({ children }: { children: React.ReactNode }) {
     } else {
       document.body.classList.remove('admin-body');
     }
-
-    return () => {
-      document.body.classList.remove('admin-body');
-    }
+    return () => document.body.classList.remove('admin-body');
   }, [isProtectedAdminRoute]);
 
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center h-screen bg-background">
+          <Loader2 className="h-8 w-8 animate-spin text-primary" />
+      </div>
+    );
+  }
+  
+  if (!isAuthenticated && isProtectedAdminRoute) {
+    return null;
+  }
+
+  return <>{children}</>;
+}
+
+
+function AppLayout({ children }: { children: React.ReactNode }) {
+  const pathname = usePathname();
+  const isProtectedAdminRoute = pathname.startsWith('/admin') && pathname !== '/admin/login';
+  const isAdminLoginPage = pathname === '/admin/login';
+
   return (
-    <ShowcaseProvider>
-      <TestimonialsProvider>
-        <EmployeeProvider>
-          <BookingProvider>
-            <ProjectProvider>
-              {isProtectedAdminRoute ? (
-                <div className="min-h-screen flex flex-col">
+      <AuthGuard>
+          {isProtectedAdminRoute ? (
+              <div className="min-h-screen flex flex-col">
                   <AdminHeader />
                   <main className="flex-grow container mx-auto p-4 sm:p-6 lg:p-8">
-                    {children}
+                      {children}
                   </main>
-                </div>
-              ) : (
-                <div className="flex flex-col min-h-screen">
+              </div>
+          ) : (
+              <div className="flex flex-col min-h-screen">
                   <Header />
                   <main className={cn("flex-grow", isAdminLoginPage && "flex items-center justify-center")}>{children}</main>
                   <Footer />
-                </div>
-              )}
-            </ProjectProvider>
-          </BookingProvider>
-        </EmployeeProvider>
-      </TestimonialsProvider>
-    </ShowcaseProvider>
+              </div>
+          )}
+      </AuthGuard>
+  )
+}
+
+
+export function RootLayoutClient({ children }: { children: React.ReactNode }) {
+  return (
+    <AuthProvider>
+      <ShowcaseProvider>
+        <TestimonialsProvider>
+          <EmployeeProvider>
+            <BookingProvider>
+              <ProjectProvider>
+                <AppLayout>{children}</AppLayout>
+              </ProjectProvider>
+            </BookingProvider>
+          </EmployeeProvider>
+        </TestimonialsProvider>
+      </ShowcaseProvider>
+    </AuthProvider>
   )
 }

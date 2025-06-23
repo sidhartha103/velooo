@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState } from 'react';
@@ -8,17 +9,19 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from '@/hooks/use-toast';
 import { LogIn } from 'lucide-react';
+import { useAuth } from '@/context/auth-context';
 
 export default function AdminLoginPage() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const router = useRouter();
     const { toast } = useToast();
+    const { login } = useAuth();
 
     const handleLogin = (e: React.FormEvent) => {
         e.preventDefault();
         if (email === 'admin@veloshoot.com' && password === 'password') {
-            router.push('/admin');
+            login(() => router.push('/admin'));
         } else {
             toast({
                 variant: 'destructive',

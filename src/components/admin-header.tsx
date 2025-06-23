@@ -2,7 +2,7 @@
 "use client";
 
 import Link from 'next/link';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import { LayoutDashboard, Lightbulb, Menu, User, LogOut, Clapperboard, MessageSquare, Users, CalendarCheck, Briefcase, ClipboardList } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from './ui/button';
@@ -16,10 +16,11 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { useAuth } from '@/context/auth-context';
 
 export function AdminHeader() {
     const pathname = usePathname();
-    const router = useRouter();
+    const { logout } = useAuth();
 
     const navItems = [
         { href: '/admin', icon: LayoutDashboard, label: 'Dashboard' },
@@ -33,7 +34,7 @@ export function AdminHeader() {
     ];
 
     const handleLogout = () => {
-        router.push('/');
+        logout();
     };
 
     return (
