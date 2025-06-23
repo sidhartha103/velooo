@@ -1,7 +1,8 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardContent } from "@/components/ui/card";
+import { cn } from "@/lib/utils";
 
-export function Testimonials() {
+export function Testimonials({ className }: { className?: string }) {
     const testimonialsData = [
         {
             name: "Sarah L.",
@@ -27,7 +28,7 @@ export function Testimonials() {
     ];
 
     return (
-        <section className="py-20 bg-card/50">
+        <section className={cn("py-20", className)}>
             <div className="container mx-auto px-4">
                 <div className="text-center mb-12">
                     <h2 className="text-4xl font-bold">What Our <span className="text-primary">Partners Say</span></h2>

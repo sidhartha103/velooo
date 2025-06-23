@@ -1,12 +1,14 @@
 import { Button } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
 
 interface HeroProps {
     onBookNowClick: () => void;
+    className?: string;
 }
 
-export function Hero({ onBookNowClick }: HeroProps) {
+export function Hero({ onBookNowClick, className }: HeroProps) {
     return (
-        <section className="text-center pt-32 md:pt-40 pb-10 md:pb-20">
+        <section className={cn("text-center pt-32 md:pt-40 pb-10 md:pb-20", className)}>
             <div className="container mx-auto px-4">
                 <p className="text-lg text-muted-foreground">Reels, Ready in a</p>
                 <h1 className="text-6xl md:text-8xl font-bold my-4">

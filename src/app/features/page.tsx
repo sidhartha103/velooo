@@ -25,7 +25,7 @@ export default function FeaturesPage() {
                     </div>
                 </section>
                 
-                <section className="my-24">
+                <section className="my-24 bg-card/50">
                     <h2 className="text-3xl font-bold text-center mb-12">Book with Total <span className="text-primary">Peace of Mind</span></h2>
                     <div className="grid md:grid-cols-2 gap-8 items-center">
                         <div className="bg-card border border-border p-4 rounded-lg">
@@ -38,7 +38,7 @@ export default function FeaturesPage() {
                 </section>
                 
                 <Features title="Why Choose Us?" />
-                <GetStarted />
+                <GetStarted className="bg-card/50" />
             </main>
         </div>
     );

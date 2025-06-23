@@ -14,9 +14,9 @@ export function HomePageClient() {
     return (
         <>
             <Hero onBookNowClick={() => setIsBookingModalOpen(true)} />
-            <Features />
+            <Features className="bg-card/50" />
             <CreatorShowcase />
-            <Testimonials />
+            <Testimonials className="bg-card/50" />
             <GetStarted />
             <BookingModal isOpen={isBookingModalOpen} onOpenChange={setIsBookingModalOpen} />
         </>

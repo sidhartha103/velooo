@@ -2,8 +2,9 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { ArrowRight } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
-export function CreatorShowcase() {
+export function CreatorShowcase({ className }: { className?: string }) {
     const reels = [
         { id: 1, src: "https://placehold.co/400x600.png", category: "Events & Weddings", hint: "wedding event" },
         { id: 2, src: "https://placehold.co/400x600.png", category: "Celebrities", hint: "celebrity portrait" },
@@ -12,7 +13,7 @@ export function CreatorShowcase() {
     ];
 
     return (
-        <section className="py-20">
+        <section className={cn("py-20", className)}>
             <div className="container mx-auto px-4">
                 <div className="text-center mb-12">
                     <h2 className="text-4xl font-bold">Creator <span className="text-primary">Showcase</span></h2>
