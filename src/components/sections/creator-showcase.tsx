@@ -2,14 +2,28 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
+import type React from 'react';
 import { Button } from '@/components/ui/button';
-import { ArrowRight, PlayCircle } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useShowcase } from '@/context/showcase-context';
 
 export function CreatorShowcase({ className }: { className?: string }) {
     const { reels: allReels } = useShowcase();
     const reels = allReels.slice(0, 4);
+
+    const handleMediaClick = (e: React.MouseEvent<HTMLDivElement>) => {
+        const video = e.currentTarget.querySelector('video');
+        if (video) {
+            if (video.requestFullscreen) {
+                video.requestFullscreen();
+            } else if ((video as any).webkitRequestFullscreen) { /* Safari */
+                (video as any).webkitRequestFullscreen();
+            } else if ((video as any).msRequestFullscreen) { /* IE11 */
+                (video as any).msRequestFullscreen();
+            }
+        }
+    };
 
     return (
         <section className={cn("py-20", className)}>
@@ -20,7 +34,7 @@ export function CreatorShowcase({ className }: { className?: string }) {
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
                     {reels.map(reel => (
-                        <div key={reel.id} className="group relative rounded-lg overflow-hidden cursor-pointer aspect-[3/4] shadow-lg">
+                        <div key={reel.id} className="group relative rounded-lg overflow-hidden cursor-pointer aspect-[3/4] shadow-lg" onClick={reel.isVideo ? handleMediaClick : undefined}>
                            {reel.isVideo ? (
                                 <video src={reel.src} className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" loop muted autoPlay playsInline />
                             ) : (
@@ -32,11 +46,6 @@ export function CreatorShowcase({ className }: { className?: string }) {
                                     className="object-cover transition-transform duration-300 group-hover:scale-105"
                                     data-ai-hint={reel.hint}
                                 />
-                            )}
-                             {reel.isVideo && (
-                                <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-20 transition-opacity group-hover:bg-opacity-40">
-                                    <PlayCircle className="w-12 h-12 text-white opacity-70" />
-                                </div>
                             )}
                              <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/80 via-black/50 to-transparent">
                                 <h3 className="text-white text-lg font-semibold">{reel.category}</h3>

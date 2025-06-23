@@ -1,11 +1,24 @@
 'use client';
 
 import Image from 'next/image';
-import { PlayCircle } from 'lucide-react';
+import type React from 'react';
 import { useShowcase } from '@/context/showcase-context';
 
 export default function DiscoverPage() {
     const { reels } = useShowcase();
+
+    const handleMediaClick = (e: React.MouseEvent<HTMLDivElement>) => {
+        const video = e.currentTarget.querySelector('video');
+        if (video) {
+            if (video.requestFullscreen) {
+                video.requestFullscreen();
+            } else if ((video as any).webkitRequestFullscreen) { /* Safari */
+                (video as any).webkitRequestFullscreen();
+            } else if ((video as any).msRequestFullscreen) { /* IE11 */
+                (video as any).msRequestFullscreen();
+            }
+        }
+    };
 
     return (
         <div className="min-h-screen">
@@ -17,7 +30,7 @@ export default function DiscoverPage() {
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 pb-12">
                     {reels.map(reel => (
-                        <div key={reel.id} className="group relative rounded-lg overflow-hidden cursor-pointer aspect-[3/4] shadow-lg">
+                        <div key={reel.id} className="group relative rounded-lg overflow-hidden cursor-pointer aspect-[3/4] shadow-lg" onClick={reel.isVideo ? handleMediaClick : undefined}>
                             {reel.isVideo ? (
                                 <video src={reel.src} className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" loop muted autoPlay playsInline />
                             ) : (
@@ -29,11 +42,6 @@ export default function DiscoverPage() {
                                     className="object-cover transition-transform duration-300 group-hover:scale-105"
                                     data-ai-hint={reel.hint}
                                 />
-                            )}
-                            {reel.isVideo && (
-                                <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-20 transition-opacity group-hover:bg-opacity-40">
-                                    <PlayCircle className="w-16 h-16 text-white opacity-80" />
-                                </div>
                             )}
                             <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/80 via-black/50 to-transparent">
                                 <h3 className="text-white text-lg font-semibold">{reel.title || reel.category}</h3>
