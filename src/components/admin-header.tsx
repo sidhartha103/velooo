@@ -42,17 +42,17 @@ export function AdminHeader() {
 
                     {/* Centered Nav for Desktop */}
                     <div className="absolute left-1/2 -translate-x-1/2 hidden md:block">
-                        <nav className="flex items-center space-x-1 bg-background rounded-full p-1 border border-border">
+                        <nav className="flex items-center space-x-2 bg-background rounded-full p-1 border border-border">
                             {navItems.map((item) => (
                                 <Link key={item.href} href={item.href}
                                     className={cn(
-                                        "flex items-center gap-2 px-3 py-1.5 rounded-full transition-colors text-sm font-medium",
+                                        "p-2 rounded-full transition-colors",
                                         pathname === item.href || (item.href !== '/admin' && pathname.startsWith(item.href)) 
                                             ? 'bg-primary text-primary-foreground' 
                                             : 'text-muted-foreground hover:bg-muted/50 hover:text-foreground'
                                     )}>
-                                    <item.icon size={16} />
-                                    <span>{item.label}</span>
+                                    <item.icon size={20} />
+                                    <span className="sr-only">{item.label}</span>
                                 </Link>
                             ))}
                         </nav>
