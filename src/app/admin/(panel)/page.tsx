@@ -1,3 +1,4 @@
+
 'use client';
 
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
@@ -13,8 +14,10 @@ export default function AdminDashboardPage() {
     const { projects } = useProjects();
     
     const [shootsThisMonth, setShootsThisMonth] = useState(0);
+    const [activeCreators, setActiveCreators] = useState(0);
+    const [totalRevenue, setTotalRevenue] = useState(0);
 
-    // Defer this calculation to the client to avoid hydration mismatch from `new Date()` and `bookings` context
+    // Defer all calculations to the client to avoid hydration mismatch
     useEffect(() => {
         const monthlyShoots = bookings.filter(booking => {
             const bookingDate = new Date(booking.date);
@@ -23,13 +26,16 @@ export default function AdminDashboardPage() {
             return bookingDate.getMonth() === now.getMonth() && bookingDate.getFullYear() === now.getFullYear();
         }).length;
         setShootsThisMonth(monthlyShoots);
-    }, [bookings]);
 
-    const activeCreators = employees.filter(e => e.status === 'approved').length;
+        const creators = employees.filter(e => e.status === 'approved').length;
+        setActiveCreators(creators);
 
-    const totalRevenue = projects
-        .filter(p => p.status === 'Completed')
-        .reduce((sum, p) => sum + p.price, 0);
+        const revenue = projects
+            .filter(p => p.status === 'Completed')
+            .reduce((sum, p) => sum + p.price, 0);
+        setTotalRevenue(revenue);
+    }, [bookings, employees, projects]);
+
 
     return (
         <div className="space-y-6">
