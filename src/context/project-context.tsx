@@ -17,7 +17,7 @@ const initialProjects: Project[] = [
         id: 1,
         title: 'Pre-Wedding Shoot',
         clientName: 'Alice & Bob',
-        dueDate: new Date(new Date().setDate(new Date().getDate() + 10)).toISOString().split('T')[0],
+        dueDate: '2024-08-10',
         status: 'In Progress',
         price: 1500,
     },
@@ -25,7 +25,7 @@ const initialProjects: Project[] = [
         id: 2,
         title: 'Corporate Headshots',
         clientName: 'TechCorp Inc.',
-        dueDate: new Date(new Date().setDate(new Date().getDate() + 5)).toISOString().split('T')[0],
+        dueDate: '2024-08-05',
         status: 'Not Started',
         price: 800,
     },
@@ -33,7 +33,7 @@ const initialProjects: Project[] = [
         id: 3,
         title: 'Fashion Lookbook',
         clientName: 'StyleWear Co.',
-        dueDate: new Date(new Date().setDate(new Date().getDate() - 2)).toISOString().split('T')[0],
+        dueDate: '2024-07-28',
         status: 'Completed',
         price: 2200,
     },
@@ -41,7 +41,7 @@ const initialProjects: Project[] = [
         id: 4,
         title: 'Product Launch Video',
         clientName: 'Innovate LLC',
-        dueDate: new Date(new Date().setDate(new Date().getDate() + 20)).toISOString().split('T')[0],
+        dueDate: '2024-08-20',
         status: 'Not Started',
         price: 3500,
     },
@@ -57,7 +57,7 @@ interface ProjectContextType {
 const ProjectContext = createContext<ProjectContextType | undefined>(undefined);
 
 export function ProjectProvider({ children }: { children: ReactNode }) {
-    const [projects, setProjects] = useState<Project[]>([]);
+    const [projects, setProjects] = useState<Project[]>(initialProjects);
     const [isInitialized, setIsInitialized] = useState(false);
 
     useEffect(() => {
@@ -66,7 +66,7 @@ export function ProjectProvider({ children }: { children: ReactNode }) {
             if (storedProjects) {
                 setProjects(JSON.parse(storedProjects));
             } else {
-                setProjects(initialProjects);
+                localStorage.setItem('projects', JSON.stringify(initialProjects));
             }
         } catch (error) {
             console.error("Failed to load projects from localStorage", error);

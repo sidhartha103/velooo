@@ -5,20 +5,27 @@ import { DollarSign, Users, Film } from "lucide-react";
 import { useEmployees } from "@/context/employee-context";
 import { useBookings } from "@/context/booking-context";
 import { useProjects } from "@/context/project-context";
+import { useState, useEffect } from "react";
 
 export default function AdminDashboardPage() {
     const { employees } = useEmployees();
     const { bookings } = useBookings();
     const { projects } = useProjects();
+    
+    const [shootsThisMonth, setShootsThisMonth] = useState(0);
+
+    // Defer this calculation to the client to avoid hydration mismatch from `new Date()` and `bookings` context
+    useEffect(() => {
+        const monthlyShoots = bookings.filter(booking => {
+            const bookingDate = new Date(booking.date);
+            const now = new Date();
+            if (isNaN(bookingDate.getTime())) return false;
+            return bookingDate.getMonth() === now.getMonth() && bookingDate.getFullYear() === now.getFullYear();
+        }).length;
+        setShootsThisMonth(monthlyShoots);
+    }, [bookings]);
 
     const activeCreators = employees.filter(e => e.status === 'approved').length;
-
-    const shootsThisMonth = bookings.filter(booking => {
-        const bookingDate = new Date(booking.date);
-        const now = new Date();
-        if (isNaN(bookingDate.getTime())) return false;
-        return bookingDate.getMonth() === now.getMonth() && bookingDate.getFullYear() === now.getFullYear();
-    }).length;
 
     const totalRevenue = projects
         .filter(p => p.status === 'Completed')
