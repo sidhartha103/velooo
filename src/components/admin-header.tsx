@@ -27,7 +27,7 @@ export function AdminHeader() {
     ];
 
     const handleLogout = () => {
-        router.push('/admin/login');
+        router.push('/');
     };
 
     return (
