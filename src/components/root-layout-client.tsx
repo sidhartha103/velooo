@@ -13,7 +13,7 @@ import { EmployeeProvider } from '@/context/employee-context';
 import { BookingProvider } from '@/context/booking-context';
 import { ProjectProvider } from '@/context/project-context';
 import { AuthProvider, useAuth } from '@/context/auth-context';
-import { Loader2 } from 'lucide-react';
+import { PageLoader } from './page-loader';
 
 function AuthGuard({ children }: { children: React.ReactNode }) {
   const { isAuthenticated, isLoading } = useAuth();
@@ -39,16 +39,14 @@ function AuthGuard({ children }: { children: React.ReactNode }) {
     return () => document.body.classList.remove('admin-body');
   }, [isProtectedAdminRoute]);
 
-  if (isLoading) {
-    return (
-      <div className="flex items-center justify-center h-screen bg-background">
-          <Loader2 className="h-8 w-8 animate-spin text-primary" />
-      </div>
-    );
+  // While checking auth status on a protected route, render nothing.
+  // This prevents a flash of content, and our PageLoader will show progress.
+  if (isLoading && isProtectedAdminRoute) {
+    return null;
   }
   
   if (!isAuthenticated && isProtectedAdminRoute) {
-    return null;
+    return null; // Don't render children, useEffect will redirect
   }
 
   return <>{children}</>;
@@ -89,6 +87,7 @@ export function RootLayoutClient({ children }: { children: React.ReactNode }) {
           <EmployeeProvider>
             <BookingProvider>
               <ProjectProvider>
+                <PageLoader />
                 <AppLayout>{children}</AppLayout>
               </ProjectProvider>
             </BookingProvider>

@@ -1,0 +1,25 @@
+{
+  "firestore": {
+    "rules": "What file should be used for Firestore Rules? (firestore.rules)",
+    "indexes": "firestore.indexes.json"
+  },
+  "functions": [
+    {
+      "source": "functions",
+      "codebase": "default"
+    }
+  ],
+  "emulators": {
+    "functions": {
+      "port": 5005
+    },
+    "firestore": {
+      "port": 8085
+    },
+    "ui": {
+      "enabled": true,
+      "port": 4005
+    },
+    "singleProjectMode": true
+  }
+}
