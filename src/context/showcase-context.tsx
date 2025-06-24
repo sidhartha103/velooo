@@ -1,3 +1,4 @@
+
 'use client';
 
 import React, { createContext, useContext, useState, ReactNode, useEffect, useCallback, useMemo } from 'react';
@@ -31,7 +32,8 @@ interface ShowcaseContextType {
 const ShowcaseContext = createContext<ShowcaseContextType | undefined>(undefined);
 
 export function ShowcaseProvider({ children }: { children: ReactNode }) {
-    const [reels, setReels] = useState<Reel[]>(initialReels);
+    const [reels, setReels] = useState<Reel[]>([]);
+    const [isInitialized, setIsInitialized] = useState(false);
 
     useEffect(() => {
         try {
@@ -39,13 +41,32 @@ export function ShowcaseProvider({ children }: { children: ReactNode }) {
             if (storedReels) {
                 setReels(JSON.parse(storedReels));
             } else {
-                localStorage.setItem('showcaseReels', JSON.stringify(initialReels));
+                setReels(initialReels);
             }
         } catch (error) {
             console.error("Failed to load reels from localStorage", error);
             setReels(initialReels);
         }
+         setIsInitialized(true);
     }, []);
+
+     useEffect(() => {
+        if (isInitialized) {
+            try {
+                // Filter out blob URLs before saving to localStorage
+                const persistentReels = reels.filter(r => !r.src.startsWith('blob:'));
+                if (reels.length > persistentReels.length) {
+                     const storedReels = localStorage.getItem('showcaseReels');
+                     const baseReels = storedReels ? JSON.parse(storedReels) : initialReels;
+                     localStorage.setItem('showcaseReels', JSON.stringify(baseReels));
+                } else {
+                    localStorage.setItem('showcaseReels', JSON.stringify(reels));
+                }
+            } catch (error) {
+                 console.error("Failed to write reels to localStorage", error);
+            }
+        }
+    }, [reels, isInitialized]);
 
     const addReel = useCallback((reel: Omit<Reel, 'id'>) => {
         const newReel = { ...reel, id: Date.now() };
@@ -53,16 +74,7 @@ export function ShowcaseProvider({ children }: { children: ReactNode }) {
     }, []);
 
     const deleteReel = useCallback((id: number) => {
-        setReels(prevReels => {
-            const newReels = prevReels.filter(reel => reel.id !== id);
-            try {
-                const persistentReels = newReels.filter(r => !r.src.startsWith('blob:'));
-                localStorage.setItem('showcaseReels', JSON.stringify(persistentReels));
-            } catch (error) {
-                console.error("Failed to save reels to localStorage after deletion.", error);
-            }
-            return newReels;
-        });
+        setReels(prevReels => prevReels.filter(reel => reel.id !== id));
     }, []);
 
     const value = useMemo(() => ({ reels, addReel, deleteReel }), [reels, addReel, deleteReel]);

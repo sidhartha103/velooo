@@ -16,25 +16,32 @@ export default function AdminDashboardPage() {
     const [shootsThisMonth, setShootsThisMonth] = useState(0);
     const [activeCreators, setActiveCreators] = useState(0);
     const [totalRevenue, setTotalRevenue] = useState(0);
+    const [isClient, setIsClient] = useState(false);
+
+    useEffect(() => {
+        setIsClient(true);
+    }, []);
 
     // Defer all calculations to the client to avoid hydration mismatch
     useEffect(() => {
-        const monthlyShoots = bookings.filter(booking => {
-            const bookingDate = new Date(booking.date);
-            const now = new Date();
-            if (isNaN(bookingDate.getTime())) return false;
-            return bookingDate.getMonth() === now.getMonth() && bookingDate.getFullYear() === now.getFullYear();
-        }).length;
-        setShootsThisMonth(monthlyShoots);
+        if (isClient) {
+            const monthlyShoots = bookings.filter(booking => {
+                const bookingDate = new Date(booking.date);
+                const now = new Date();
+                if (isNaN(bookingDate.getTime())) return false;
+                return bookingDate.getMonth() === now.getMonth() && bookingDate.getFullYear() === now.getFullYear();
+            }).length;
+            setShootsThisMonth(monthlyShoots);
 
-        const creators = employees.filter(e => e.status === 'approved').length;
-        setActiveCreators(creators);
+            const creators = employees.filter(e => e.status === 'approved').length;
+            setActiveCreators(creators);
 
-        const revenue = projects
-            .filter(p => p.status === 'Completed')
-            .reduce((sum, p) => sum + p.price, 0);
-        setTotalRevenue(revenue);
-    }, [bookings, employees, projects]);
+            const revenue = projects
+                .filter(p => p.status === 'Completed')
+                .reduce((sum, p) => sum + p.price, 0);
+            setTotalRevenue(revenue);
+        }
+    }, [bookings, employees, projects, isClient]);
 
 
     return (
@@ -50,7 +57,7 @@ export default function AdminDashboardPage() {
                     </CardHeader>
                     <CardContent>
                         <div className="text-2xl font-bold">
-                            {new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(totalRevenue)}
+                            {isClient ? new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(totalRevenue) : '₹0.00'}
                         </div>
                         <p className="text-xs text-muted-foreground">
                             From completed projects
@@ -65,7 +72,7 @@ export default function AdminDashboardPage() {
                         <Users className="h-4 w-4 text-muted-foreground" />
                     </CardHeader>
                     <CardContent>
-                        <div className="text-2xl font-bold">{activeCreators}</div>
+                        <div className="text-2xl font-bold">{isClient ? activeCreators : 0}</div>
                         <p className="text-xs text-muted-foreground">
                             Total approved creators
                         </p>
@@ -77,7 +84,7 @@ export default function AdminDashboardPage() {
                         <Film className="h-4 w-4 text-muted-foreground" />
                     </CardHeader>
                     <CardContent>
-                        <div className="text-2xl font-bold">{shootsThisMonth}</div>
+                        <div className="text-2xl font-bold">{isClient ? shootsThisMonth : 0}</div>
                         <p className="text-xs text-muted-foreground">
                             based on booking date
                         </p>

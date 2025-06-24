@@ -57,7 +57,7 @@ interface ProjectContextType {
 const ProjectContext = createContext<ProjectContextType | undefined>(undefined);
 
 export function ProjectProvider({ children }: { children: ReactNode }) {
-    const [projects, setProjects] = useState<Project[]>(initialProjects);
+    const [projects, setProjects] = useState<Project[]>([]);
     const [isInitialized, setIsInitialized] = useState(false);
 
     useEffect(() => {
@@ -66,7 +66,7 @@ export function ProjectProvider({ children }: { children: ReactNode }) {
             if (storedProjects) {
                 setProjects(JSON.parse(storedProjects));
             } else {
-                localStorage.setItem('projects', JSON.stringify(initialProjects));
+                setProjects(initialProjects);
             }
         } catch (error) {
             console.error("Failed to load projects from localStorage", error);

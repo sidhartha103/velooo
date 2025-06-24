@@ -63,7 +63,7 @@ interface TestimonialsContextType {
 const TestimonialsContext = createContext<TestimonialsContextType | undefined>(undefined);
 
 export function TestimonialsProvider({ children }: { children: ReactNode }) {
-    const [testimonials, setTestimonials] = useState<Testimonial[]>(initialTestimonials);
+    const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
     const [isInitialized, setIsInitialized] = useState(false);
 
     useEffect(() => {
@@ -72,10 +72,11 @@ export function TestimonialsProvider({ children }: { children: ReactNode }) {
             if (storedTestimonials) {
                 setTestimonials(JSON.parse(storedTestimonials));
             } else {
-                localStorage.setItem('testimonials', JSON.stringify(initialTestimonials));
+                setTestimonials(initialTestimonials);
             }
         } catch (error) {
             console.error("Failed to load testimonials from localStorage", error);
+            setTestimonials(initialTestimonials);
         }
         setIsInitialized(true);
     }, []);
