@@ -17,7 +17,11 @@ export function PageLoader() {
 
   // Effect to detect navigation start (for client-side navigation)
   useEffect(() => {
-    const handleStart = () => setIsLoading(true);
+    const handleStart = () => {
+      setTimeout(() => {
+        setIsLoading(true);
+      }, 0);
+    };
 
     const originalPushState = history.pushState;
     // Wrap pushState to detect when a new page is being navigated to
