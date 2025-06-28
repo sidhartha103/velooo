@@ -6,6 +6,9 @@ import { RootLayoutClient } from '@/components/root-layout-client';
 export const metadata: Metadata = {
   title: 'VeloShoot',
   description: 'Reels, Ready in a Snap.',
+   icons: {
+    icon: '/favicon.icoo',
+  },
 };
 
 export default function RootLayout({

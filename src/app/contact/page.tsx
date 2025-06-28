@@ -18,7 +18,7 @@ export default function ContactPage() {
                                 <div className="space-y-4 text-muted-foreground">
                                     <div className="flex items-center gap-4">
                                         <Mail className="w-6 h-6 text-accent"/>
-                                        <a href="mailto:hello@veloshoot.com" className="hover:text-primary transition-colors">hello@veloshoot.com</a>
+                                        <a href="mailto:hello@veloshoot.com" className="hover:text-primary transition-colors">contactus@veloshoot.com</a>
                                     </div>
                                     <div className="flex items-center gap-4">
                                         <Phone className="w-6 h-6 text-accent"/>
